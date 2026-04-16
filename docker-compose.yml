@@ -1,0 +1,22 @@
+services:
+
+  # Modo sample — rápido (deve terminar em ~10-30s dependendo da máquina)
+  sample:
+    build: .
+    image: portfolio-opt:latest
+    container_name: portfolio-opt-sample
+    command: ["--mode=sample", "--max-combos=500", "--sims=2000", "--parallel=true"]
+
+  # Benchmark paralelo vs sequencial (5 runs cada)
+  benchmark:
+    build: .
+    image: portfolio-opt:latest
+    container_name: portfolio-opt-bench
+    command: ["--mode=benchmark", "--max-combos=200", "--sims=1000", "--runs=5"]
+
+  # Run maior (cuidado: pode levar alguns minutos)
+  big:
+    build: .
+    image: portfolio-opt:latest
+    container_name: portfolio-opt-big
+    command: ["--mode=sample", "--max-combos=5000", "--sims=10000", "--parallel=true"]
