@@ -12,7 +12,6 @@ type CliArgs = {
     Mode: string            // "sample" | "benchmark" | "full"
     MaxCombos: int          // quantas combinações avaliar (override)
     SimsPerCombo: int       // sorteios de pesos por combinação
-    NumDays: int            // dias de retorno a gerar (sintético)
     Seed: int
     Parallel: bool
     BenchmarkRuns: int
@@ -22,7 +21,6 @@ let defaultArgs = {
     Mode = "sample"
     MaxCombos = 500
     SimsPerCombo = 2000
-    NumDays = 126       // ~ 2º semestre de 2025
     Seed = 42
     Parallel = true
     BenchmarkRuns = 5
@@ -35,7 +33,6 @@ let parseArgs (argv: string[]) : CliArgs =
         | [| "--mode"; v |]       -> { acc with Mode = v }
         | [| "--max-combos"; v |] -> { acc with MaxCombos = Int32.Parse v }
         | [| "--sims"; v |]       -> { acc with SimsPerCombo = Int32.Parse v }
-        | [| "--days"; v |]       -> { acc with NumDays = Int32.Parse v }
         | [| "--seed"; v |]       -> { acc with Seed = Int32.Parse v }
         | [| "--parallel"; v |]   -> { acc with Parallel = Boolean.Parse v }
         | [| "--runs"; v |]       -> { acc with BenchmarkRuns = Int32.Parse v }
@@ -77,14 +74,13 @@ let runSample (args: CliArgs) =
     printfn "  Paralelo           : %b" args.Parallel
     printfn "  Max combinações    : %d  (C(30,20) = 30.045.015 no total)" args.MaxCombos
     printfn "  Simulações/combo   : %s" (args.SimsPerCombo.ToString("N0"))
-    printfn "  Dias de retorno    : %d" args.NumDays
     printfn "  Seed               : %d" args.Seed
     printfn "  Cores disponíveis  : %d" Environment.ProcessorCount
     printfn ""
 
-    printfn "Gerando retornos sintéticos para os 30 tickers do Dow Jones..."
-    let returns = generateSyntheticReturns dowJonesTickers args.NumDays args.Seed
-    printfn "  Matriz gerada: %d dias × %d ativos" returns.Length dowJonesTickers.Length
+    printfn "Carregando retornos reais do Dow Jones de data/raw/..."
+    let returns = loadDowJonesReturns "data/raw"
+    printfn "  Matriz carregada: %d dias × %d ativos (retornos diários)" returns.Length dowJonesTickers.Length
 
     let config = {
         NumAssetsInPortfolio = 20
@@ -122,7 +118,7 @@ let runBenchmark (args: CliArgs) =
     printfn "Executando %d rodadas em cada modo..." args.BenchmarkRuns
     printfn ""
 
-    let returns = generateSyntheticReturns dowJonesTickers args.NumDays args.Seed
+    let returns = loadDowJonesReturns "data/raw"
     let baseConfig = {
         NumAssetsInPortfolio = 20
         TotalAssets = 30

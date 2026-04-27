@@ -1,3 +1,13 @@
+# ── .NET / F# ──────────────────────────────────────────────────────────────
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.vscode/
+# data/raw/ é commitado intencionalmente (CSVs do Yahoo Finance)
+
+# ── Python (misc) ───────────────────────────────────────────────────────────
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

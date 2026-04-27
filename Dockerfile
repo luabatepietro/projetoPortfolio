@@ -22,6 +22,7 @@ RUN dotnet publish PortfolioOptimization.fsproj \
 FROM mcr.microsoft.com/dotnet/runtime:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish ./
+COPY data/ ./data/
 
 # GC em modo servidor + concurrent (melhor para cargas paralelas)
 ENV DOTNET_gcServer=1

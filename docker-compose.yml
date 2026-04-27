@@ -12,7 +12,7 @@ services:
     build: .
     image: portfolio-opt:latest
     container_name: portfolio-opt-bench
-    command: ["--mode=benchmark", "--max-combos=200", "--sims=1000", "--runs=5"]
+    command: ["--mode=benchmark", "--max-combos=5000", "--sims=10000", "--runs=5"]
 
   # Run maior (cuidado: pode levar alguns minutos)
   big:
