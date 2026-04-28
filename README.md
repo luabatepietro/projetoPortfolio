@@ -57,8 +57,6 @@ projetoPortfolio/
 │       └── *.csv           # 30 CSVs do Yahoo Finance (commitados)
 ├── docs/
 │   └── benchmark.md        # saída completa do benchmark
-├── scripts/
-│   └── download_data.py    # script auxiliar de coleta (uso único, não é parte do F#)
 └── src/
     ├── PortfolioOptimization.fsproj
     ├── Types.fs             # tipos do domínio (Weights, ReturnsMatrix, SimConfig…)
@@ -87,15 +85,6 @@ baixados uma única vez e commitados em `data/raw/`.
 usando o script Python `scripts/download_data.py` (que usa a biblioteca
 `yfinance`). O script é um utilitário externo de coleta — não faz parte do
 pipeline F#. O F# apenas lê os CSVs já presentes em `data/raw/`.
-
-Para reproduzir a coleta (caso queira atualizar os dados):
-
-```bash
-cd scripts && python3 -m pip install yfinance && python3 download_data.py
-```
-
-Os retornos diários são calculados como `Adj Close_t / Adj Close_{t-1} − 1`
-sobre a **interseção** de datas presentes nos 30 arquivos simultaneamente.
 
 ---
 
